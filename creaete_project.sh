@@ -39,7 +39,7 @@ function prepare_docker() {
   cp $SCRIPT_DIR/.env                         $PROJECT_DIR
   cp -r $SCRIPT_DIR/secrets                   $PROJECT_DIR
   cp $SCRIPT_DIR/docker-compose.yml           $PROJECT_DIR
-  sed -i "s/dajngo_net/${PROJECT}_net/" $PROJECT_DIR/docker-compose.yml
+  sed -i "s/django_net/${PROJECT}_net/" $PROJECT_DIR/docker-compose.yml
 }
 
 
@@ -131,8 +131,8 @@ function use_postgresql() {
   sed -i "s/'NAME': BASE_DIR \/ 'db.sqlite3',/'NAME': '$POSTGRES_NAME',/"           $BACKEND_PROJECT_DIR/settings.py
   sed -i "/'NAME': 'postgres',/a\        'USER': '$POSTGRES_USER',"                 $BACKEND_PROJECT_DIR/settings.py
   sed -i "/'USER': '$POSTGRES_USER',/a\        'PASSWORD': '$POSTGRES_PASSWORD',"   $BACKEND_PROJECT_DIR/settings.py
-  sed -i "/'PASSWORD': '$POSTGRES_PASSWORD',/a\        'HOST': '127.0.0.1',"        $BACKEND_PROJECT_DIR/settings.py
-  sed -i "/'HOST': 'db',/a\        'PORT': '5432',"                          $BACKEND_PROJECT_DIR/settings.py
+  sed -i "/'PASSWORD': '$POSTGRES_PASSWORD',/a\        'HOST': 'db',"               $BACKEND_PROJECT_DIR/settings.py
+  sed -i "/'HOST': 'db',/a\        'PORT': '5432',"                                 $BACKEND_PROJECT_DIR/settings.py
 }
 
 
@@ -194,7 +194,7 @@ function create_react_frontend() {
   sed -i '$d' $FRONTEND_APP_DIR/package.json
   cat << EOF >> $FRONTEND_APP_DIR/package.json 
   },
-  "proxy": "http://localhost:8000"
+  "proxy": "http://backend:8000"
 }
 EOF
 
@@ -206,6 +206,7 @@ EOF
 
   echo "Copy App.js"
   cp $SCRIPT_DIR/frontend/App.js $FRONTEND_APP_DIR/src/App.js
+  cp $SCRIPT_DIR/frontend/App.css $FRONTEND_APP_DIR/src/App.css
 }
 
 
